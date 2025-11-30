@@ -1,0 +1,114 @@
+.student-list-container {
+  max-width: 500px;
+  padding: 30px 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.student-list-container h2 {
+  color: #667eea;
+  margin-bottom: 20px;
+  font-size: 1.8em;
+  font-weight: 600;
+}
+
+.no-students {
+  text-align: center;
+  padding: 30px 20px;
+  color: #999;
+  font-size: 1em;
+}
+
+.student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.student-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.student-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.student-list::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+.student-list::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
+}
+
+.student-card {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.student-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+}
+
+.student-card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 15px;
+  color: white;
+}
+
+.student-card-header h3 {
+  margin: 0;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.student-card-body {
+  padding: 15px;
+  background: white;
+}
+
+.student-card-body p {
+  margin: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95em;
+}
+
+.student-card-body p:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  font-weight: 600;
+  color: #667eea;
+  min-width: 70px;
+}
+
+.value {
+  color: #333;
+  text-align: right;
+  flex: 1;
+  padding-left: 10px;
+}
