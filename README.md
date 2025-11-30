@@ -4,8 +4,8 @@ A full-stack web application for managing student registrations with real-time d
 
 ## 🎯 Live Demo
 
-- **Frontend:** https://fsd-student-management.vercel.app
-- **Backend API:** https://fsd-project-1-diqe.onrender.com
+- **Frontend:** https://fsd-project-gilt.vercel.app/
+- **Backend API:** curl https://your-backend.onrender.com/
 - **API Docs:** https://fsd-project-1-diqe.onrender.com/students
 
 ---
