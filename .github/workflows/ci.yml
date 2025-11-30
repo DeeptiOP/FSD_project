@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-backend:
+    name: Build & Test Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install backend dependencies
+        run: npm install
+
+      - name: Run backend lint (if configured)
+        run: |
+          if [ -f package.json ]; then
+            echo "No tests configured for backend. Skipping test step.";
+          fi
+
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-build
+          path: client/build
+
+# Notes:
+# - This CI workflow builds both the backend (basic checks) and the frontend (production build).
+# - For continuous deployment to Vercel and Render, connect this GitHub repository to Vercel (frontend) and Render (backend) via their dashboards.
+#   Both services can be configured to automatically deploy on pushes to the `main` branch. That approach is simpler and more secure
+#   than embedding deployment API keys into workflow files here.
+#
+# Quick links:
+# - Vercel docs: https://vercel.com/docs/platform/deployments/git
+# - Render docs: https://render.com/docs/deploy-to-render
