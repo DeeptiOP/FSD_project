@@ -84,26 +84,32 @@ Click "Environment Variables" and add:
 3. Click "Connect"
 
 ### Step 3: Configure Backend Deployment
-Fill in the deployment form:
+**⚠️ IMPORTANT:** The `render.yaml` file in your repo handles most of this automatically!
+
+If you see a configuration form, fill in:
 
 | Field | Value |
 |-------|-------|
 | **Name** | `fsd-student-api` |
 | **Environment** | `Node` |
-| **Build Command** | `npm install` |
-| **Start Command** | `cd server && npm start` |
 | **Region** | Choose closest to you |
 | **Plan** | `Free` (or `Starter` for production) |
 
+If you don't see a form and it says "Detected render.yaml", just click "Continue" — Render will use the `render.yaml` file.
+
 ### Step 4: Add Environment Variables
+The `render.yaml` file defines the structure. You need to add the actual values:
+
 Click "Advanced" → "Add Environment Variable":
 
 | Key | Value |
 |-----|-------|
 | `MONGO_URL` | Your MongoDB Atlas connection string (see below) |
-| `NODE_ENV` | `production` |
 | `FRONTEND_URL` | `https://your-frontend.vercel.app` |
-| `PORT` | `5000` |
+
+**The following are already configured in `render.yaml`:**
+- `NODE_ENV`: `production`
+- `PORT`: `5000`
 
 **Where to get `MONGO_URL`:**
 1. Go to https://www.mongodb.com/cloud/atlas
@@ -112,16 +118,19 @@ Click "Advanced" → "Add Environment Variable":
 4. Choose "Connect your application"
 5. Copy the connection string
 6. Replace `<username>` and `<password>` with your database credentials
-7. Paste into Render
+7. Example: `mongodb+srv://admin:mypassword@cluster.mongodb.net/student-management`
+8. Paste into Render environment variables
 
 **Update `FRONTEND_URL`:** Use the Vercel URL from Part 1 (e.g., `https://fsd-student-management.vercel.app`)
 
 ### Step 5: Deploy Backend
 1. Click "Create Web Service"
-2. Render will build and deploy your backend
-3. Wait ~2–3 minutes for it to start
-4. Look for "Live" status (green)
-5. Your backend URL will be shown (e.g., `https://fsd-student-api.onrender.com`)
+2. Render will use the `render.yaml` and environment variables
+3. Build will run: `npm install` in the `server/` folder
+4. Start command: `npm start` (running from `server/`)
+5. Wait ~2–3 minutes for it to start
+6. Look for "Live" status (green)
+7. Your backend URL will be shown (e.g., `https://fsd-student-api.onrender.com`)
 
 **✅ After deployment:**
 - Test the backend: `curl https://fsd-student-api.onrender.com/`
@@ -174,6 +183,12 @@ Now that your backend is live, update the frontend environment variable:
 
 ## Troubleshooting
 
+### Issue: Render Build Fails with "package.json not found"
+**Solution:** 
+- The `render.yaml` file specifies `rootDir: server` — Render should find the `server/package.json` automatically
+- If it still fails, you may need to manually set the Root Directory on Render dashboard to `server/`
+- Or delete the service and redeploy — it will detect `render.yaml` this time
+
 ### Issue: Frontend shows "Cannot connect to backend"
 **Solution:** 
 - Check browser DevTools → Console for errors
@@ -186,7 +201,7 @@ Now that your backend is live, update the frontend environment variable:
 - Check Render build logs for errors
 - Verify MongoDB Atlas connection string is correct
 - Ensure `MONGO_URL` is set in Render environment variables
-- Check firewall/IP whitelist on MongoDB Atlas
+- Check firewall/IP whitelist on MongoDB Atlas (allow 0.0.0.0/0 for testing)
 
 ### Issue: Data not persisting
 **Solution:**
@@ -206,9 +221,18 @@ Now that your backend is live, update the frontend environment variable:
 
 1. **You push code to GitHub** → Both Vercel and Render automatically detect the push
 2. **Vercel rebuilds frontend** → Runs `npm run build` in `client/` folder
-3. **Render rebuilds backend** → Runs `npm install` and starts `cd server && npm start`
+3. **Render rebuilds backend** → Uses `render.yaml` to find `server/` folder, runs `npm install` and `npm start`
 4. **Both deploy simultaneously** → New code is live within 3–5 minutes
 5. **No manual steps needed** → Just push and wait
+
+---
+
+## Files That Help Deployment
+
+- **`render.yaml`** — Tells Render where the backend is and how to build it
+- **`.github/workflows/ci.yml`** — GitHub Actions CI/CD pipeline (builds on every push)
+- **`client/.env.production`** — Frontend production environment variables
+- **`server/.env.production`** — Backend production environment variables (use Render dashboard instead)
 
 ---
 
@@ -231,7 +255,7 @@ Now that your backend is live, update the frontend environment variable:
 
 ### On Render:
 - Dashboard → Service → Environment
-- Add `MONGO_URL`, `NODE_ENV`, `FRONTEND_URL`, `PORT`
+- Add `MONGO_URL`, `FRONTEND_URL`
 - Auto-redeploys (or manually trigger)
 
 ---
@@ -240,5 +264,6 @@ Now that your backend is live, update the frontend environment variable:
 
 - [Vercel Docs](https://vercel.com/docs)
 - [Render Docs](https://render.com/docs)
+- [Render render.yaml Reference](https://render.com/docs/infrastructure-as-code)
 - [MongoDB Atlas Docs](https://docs.atlas.mongodb.com/)
 - [GitHub Actions](https://docs.github.com/en/actions)
